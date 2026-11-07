@@ -4,6 +4,8 @@ Una página donde **tú (o quien quieras) eres la protagonista**: de cuerpo ente
 
 Sin servidores, sin base de datos y sin claves: es una página estática que se publica gratis en Vercel.
 
+**👉 Demo: [profitia-mi-vestidor.vercel.app](https://profitia-mi-vestidor.vercel.app)** (con el maniquí de ejemplo)
+
 > Hecho por [Profitia](https://profitia.digital) — IA para negocios. Si te sirve, deja una ⭐ en el repo.
 
 ---

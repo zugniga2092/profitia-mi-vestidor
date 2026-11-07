@@ -8,3 +8,6 @@ vestidor.html
 __pycache__/
 .vercel
 NUL
+
+.vercel
+.venv/
