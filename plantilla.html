@@ -1,0 +1,577 @@
+<title>{{NOMBRE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --MH:600px;--MB:120px;--CW:180px;--TOP:120px;
+  --ink:#16161a;--ink-2:rgba(30,30,32,.72);--ink-3:rgba(30,30,32,.8);
+  --paper:#e9e4dc;--white:#fff;
+  --ok:#2f7d55;--ok-bg:rgba(214,240,224,.92);
+  --mid:#8a5a12;--mid-bg:rgba(250,234,204,.92);
+  --no:#4a4a50;--no-bg:rgba(255,255,255,.7);
+}
+html,body{height:100%}
+body{background:var(--paper);color:var(--white);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media (pointer:fine){html,body,button,a{cursor:none}}
+
+/* ---------- escena ---------- */
+.room{position:fixed;inset:-3%;background:url("{{FONDO}}") center/cover;filter:blur(1.6px) saturate(1.03);transform:scale(1.08);will-change:transform}
+.room::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 45%,rgba(255,252,246,.10),rgba(40,30,20,.16))}
+.ghost{position:fixed;left:50%;top:calc(var(--TOP) + var(--MH)*.04);z-index:2;white-space:nowrap;font-weight:900;line-height:.8;letter-spacing:-.04em;color:rgba(255,255,255,.22);-webkit-text-stroke:1px rgba(255,255,255,.3);text-shadow:0 1px 0 rgba(255,255,255,.35);transform:translateX(-50%);pointer-events:none}
+.ghost span{display:inline-block}
+
+/* ---------- material vidrio ---------- */
+.glass{background:linear-gradient(155deg,rgba(250,248,245,.30),rgba(150,144,136,.20) 48%,rgba(205,200,192,.24));backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(255,255,255,.12),0 20px 50px -24px rgba(40,30,20,.45)}
+
+/* ---------- cabecera ---------- */
+.brand{position:fixed;left:max(18px,1.8vw);top:calc(4.2vh + 4px);z-index:30;text-shadow:0 1px 8px rgba(0,0,0,.2)}
+.brand b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em}
+.brand small{display:block;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-top:3px}
+.top{position:fixed;left:50%;top:4.2vh;transform:translateX(-50%);z-index:30;display:flex;flex-direction:column;align-items:center;gap:8px;max-width:calc(100vw - 32px)}
+.seg{position:relative;display:flex;padding:5px;border-radius:999px;gap:2px;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{position:relative;z-index:1;height:38px;padding:0 22px;font-size:14px;font-weight:500;color:var(--ink-2);border-radius:999px;white-space:nowrap;transition:color .4s var(--ease)}
+.seg button[aria-pressed="true"]{color:#111}
+.seg .pill{position:absolute;left:0;top:5px;height:38px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 4px 14px -6px rgba(0,0,0,.3);transition:transform .6s var(--ease),width .6s var(--ease)}
+.seg.small{padding:4px}
+.seg.small button{height:28px;padding:0 14px;font-size:12px}
+.seg.small .pill{top:4px;height:28px}
+
+.tag{position:fixed;right:max(18px,1.8vw);top:calc(4.2vh + 8px);z-index:30;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;color:var(--ink)}
+
+/* ---------- barra lateral ---------- */
+.rail{position:fixed;left:max(18px,1.8vw);top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;padding:8px;gap:10px;border-radius:999px}
+.rail button{position:relative;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--ink-3);transition:background .4s var(--ease),color .4s var(--ease)}
+.rail button:hover{background:rgba(255,255,255,.35)}
+.rail button[aria-pressed="true"]{background:rgba(255,255,255,.9);color:#111}
+.rail svg{width:20px;height:20px}
+.rail .tip{position:absolute;left:calc(100% + 12px);top:50%;transform:translate(-4px,-50%);opacity:0;pointer-events:none;white-space:nowrap;font-size:12px;font-weight:600;color:#111;background:rgba(255,255,255,.92);padding:6px 10px;border-radius:8px;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.rail button:hover .tip,.rail button:focus-visible .tip{opacity:1;transform:translate(0,-50%)}
+
+/* ---------- arco de prendas ---------- */
+.stage{position:fixed;inset:0;z-index:10;touch-action:pan-y}
+.arc{position:absolute;left:50%;top:50%;width:0;height:0}
+.card{position:absolute;left:calc(var(--CW)*-.5);top:calc(var(--CW)*-.71);width:var(--CW);height:calc(var(--CW)*1.42);border-radius:22px;overflow:hidden;will-change:transform,opacity,filter}
+.card .bar{position:absolute;left:12%;right:12%;top:4.2%;height:3px;border-radius:3px;background:linear-gradient(90deg,rgba(255,255,255,.35),rgba(255,255,255,.85),rgba(255,255,255,.35));box-shadow:0 1px 2px rgba(40,30,20,.25)}
+.card .hang{position:absolute;left:0;right:0;top:4.5%;height:68%;transform-origin:50% 0;pointer-events:none;will-change:transform}
+.card .hanger{position:absolute;left:24%;width:52%;top:0;height:auto;overflow:visible}
+.card .g{position:absolute;left:9%;right:9%;top:15%;bottom:0;background:top center/contain no-repeat;filter:drop-shadow(0 14px 14px rgba(40,30,20,.22))}
+.card.percha-foto .hanger{display:none}
+.card.percha-foto .g{top:0}
+.card.recorte .bar,.card.recorte .hanger{display:none}
+.card.recorte .hang{top:6%;left:8%;right:8%;height:62%}
+.card.recorte .g{inset:0;left:0;right:0;background-position:center;background-size:cover;border-radius:14px}
+.card .nm{position:absolute;left:8%;right:8%;bottom:17%;text-align:center;font-weight:600;font-size:calc(var(--CW)*.074);line-height:1.2;text-shadow:0 1px 8px rgba(0,0,0,.18)}
+.card .sb{position:absolute;left:8%;right:8%;bottom:7.5%;text-align:center;font-weight:500;font-size:calc(var(--CW)*.06);opacity:.9;text-shadow:0 1px 8px rgba(0,0,0,.18)}
+.card .badge{position:absolute;left:50%;bottom:28%;z-index:2;transform:translateX(-50%) scale(.8);opacity:0;font-size:calc(var(--CW)*.056);font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;color:var(--ok);background:var(--ok-bg);padding:.45em .8em;border-radius:999px;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.card.best .badge{opacity:1;transform:translateX(-50%) scale(1)}
+.card .sheen{position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.5) 50%,transparent 60%);transform:translateX(-120%);pointer-events:none}
+.card.shine .sheen{animation:sheen 1s var(--ease)}
+@keyframes sheen{to{transform:translateX(120%)}}
+
+/* ---------- la persona (protagonista) ---------- */
+.model{position:fixed;left:50%;bottom:var(--MB);height:var(--MH);aspect-ratio:2/3;max-width:100%;transform:translateX(-50%);z-index:50;pointer-events:none}
+.model .fig{position:absolute;inset:0;background:center bottom/contain no-repeat;filter:sepia(.07) saturate(1.04) brightness(1.02) drop-shadow(0 18px 30px rgba(90,60,40,.18))}
+#mCur{opacity:0}
+#mNext{clip-path:inset(0 0 100% 0)}
+.model .floor{position:absolute;left:24%;right:24%;bottom:-1.4%;height:4.5%;border-radius:50%;background:radial-gradient(closest-side,rgba(70,45,30,.38),rgba(70,45,30,.12) 60%,transparent)}
+.model .grid{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,rgba(255,255,255,.22) 5px 6px);mix-blend-mode:screen;clip-path:inset(0 0 100% 0);-webkit-mask:center bottom/contain no-repeat;mask:center bottom/contain no-repeat}
+.model .scan{position:absolute;left:-14%;width:128%;top:0;height:2px;opacity:0;background:linear-gradient(90deg,transparent,#fff 18%,#fff 82%,transparent);box-shadow:0 0 18px 4px rgba(255,255,255,.75),0 0 60px 10px rgba(190,225,255,.45)}
+.model .scan::after{content:"";position:absolute;left:0;right:0;bottom:100%;height:calc(var(--MH)*.12);background:linear-gradient(to top,rgba(220,238,255,.32),transparent)}
+
+/* ---------- flechas ---------- */
+.arrow{position:fixed;top:calc(var(--TOP) + var(--MH)*.38);transform:translateY(-50%);z-index:30;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#222}
+.arrow svg{width:16px;height:16px}
+.arrow.prev{left:calc(max(18px,1.8vw) + 76px)}
+.arrow.next{right:max(18px,1.8vw)}
+
+/* ---------- tarjeta de la asesora ---------- */
+.buy{position:fixed;right:max(18px,1.8vw);bottom:4.6vh;z-index:60;width:min(340px,calc(100vw - 32px));display:flex;flex-wrap:wrap;align-items:center;gap:12px 14px;padding:14px;border-radius:24px;text-shadow:0 1px 6px rgba(0,0,0,.18)}
+.thumb{flex:none;width:72px;height:72px;border-radius:16px;background:rgba(255,255,255,.3);overflow:hidden;position:relative}
+.thumb i{position:absolute;inset:6px;background:center/contain no-repeat}
+.info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.row{display:flex;align-items:center;gap:10px;min-width:0}
+.ln{position:relative;display:block;height:1.2em;overflow:hidden;flex:1;min-width:0}
+.ln span{position:absolute;left:0;top:0;white-space:nowrap}
+.name{font-size:16px;font-weight:600}
+.verdict{flex:none;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;text-shadow:none;transition:background .4s var(--ease),color .4s var(--ease)}
+.verdict.ok{color:var(--ok);background:var(--ok-bg)}
+.verdict.mid{color:var(--mid);background:var(--mid-bg)}
+.verdict.no{color:var(--no);background:var(--no-bg)}
+.advice{flex:1 1 100%;order:3;font-size:13.5px;line-height:1.45;opacity:.95;text-wrap:pretty}
+.side{flex:1 1 100%;order:4;display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,.35);min-width:0}
+.side .lbl{flex:none;font-size:12px;font-weight:500;opacity:.85;height:1.2em}
+.dots{display:flex;gap:10px}
+.dot{width:18px;height:18px;border-radius:50%;transition:box-shadow .4s var(--ease),transform .3s var(--ease)}
+.dot[aria-pressed="true"]{box-shadow:0 0 0 2px rgba(255,255,255,.95),0 0 0 4px rgba(0,0,0,.12)}
+.dot:active{transform:scale(.88)}
+.stores{display:flex;flex-wrap:wrap;gap:6px}
+.store{font-size:12px;font-weight:600;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.22);text-shadow:none;transition:background .3s var(--ease),color .3s var(--ease)}
+.store:hover{background:#fff;color:#111}
+.store:active{transform:scale(.94)}
+
+/* ---------- cursor ---------- */
+.cur{position:fixed;left:0;top:0;width:58px;height:58px;margin:-29px 0 0 -29px;z-index:100;pointer-events:none;display:none}
+@media (pointer:fine){.cur{display:block}}
+.cur .ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(255,255,255,.95);background:rgba(255,255,255,.14);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 6px 20px -8px rgba(0,0,0,.35);transition:transform .5s var(--ease),background .5s var(--ease)}
+.cur .dt{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:#fff;transition:transform .4s var(--ease)}
+.cur .tx{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;font-weight:700;letter-spacing:.12em;transform:scale(.4);opacity:0;transition:transform .45s var(--ease),opacity .45s var(--ease)}
+.cur .t1{color:#111}
+.cur.try .ring{transform:scale(1.5);background:rgba(255,255,255,.92)}
+.cur.try .dt,.cur.drag .dt{transform:scale(0)}
+.cur.try .t1{transform:scale(1);opacity:1}
+.cur.drag .ring{transform:scale(1.2)}
+.cur.drag .t2{transform:scale(1);opacity:1}
+.cur.btn .ring{transform:scale(.6)}
+.cur.down .ring{transform:scale(1.05)}
+
+/* ---------- móvil ---------- */
+@media (max-width:767px){
+  .brand,.arrow,.tag{display:none}
+  .top{top:calc(env(safe-area-inset-top,0px) + 12px);gap:6px}
+  .seg button{height:32px;padding:0 13px;font-size:12px}
+  .seg .pill{height:32px}
+  .seg.small button{height:26px;padding:0 11px;font-size:11px}
+  .seg.small .pill{height:26px}
+  .rail{left:10px;top:auto;bottom:calc(var(--MB) + 12px);transform:none;padding:6px;gap:6px}
+  .rail button{width:34px;height:34px}
+  .rail svg{width:17px;height:17px}
+  .rail .tip{display:none}
+  .buy{left:16px;right:16px;width:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);gap:10px 12px;padding:12px}
+  .thumb{width:58px;height:58px}
+  .advice{font-size:12.5px}
+  .side{flex:1 1 100%;padding-left:0;border-left:0;padding-top:10px;border-top:1px solid rgba(255,255,255,.35);min-width:0}
+}
+@media (prefers-reduced-motion:reduce){.card.shine .sheen{animation:none}}
+</style>
+
+<div class="room" id="room"></div>
+<div class="ghost" id="ghost" aria-hidden="true"></div>
+
+<div class="brand"><b>{{NOMBRE}}</b><small>{{SUBTITULO}}</small></div>
+<div class="tag glass" id="tag" hidden>Ejemplo · pon tus fotos en fotos/</div>
+
+<header class="top">
+  <nav class="seg glass" id="occ" aria-label="Ocasión"><span class="pill"></span></nav>
+  <div class="seg small glass" id="temp" aria-label="Temporada"><span class="pill"></span></div>
+</header>
+
+<aside class="rail glass" aria-label="De dónde sale la ropa">
+  <button id="mArm" aria-pressed="true" aria-label="Mi armario">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5a2 2 0 1 1 2-2"/><path d="M12 6.5v1.2L3.4 14.3A1.6 1.6 0 0 0 4.4 17h15.2a1.6 1.6 0 0 0 1-2.7L12 7.7"/></svg>
+    <span class="tip">Mi armario</span>
+  </button>
+  <button id="mShop" aria-pressed="false" aria-label="Tiendas">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>
+    <span class="tip">Tiendas</span>
+  </button>
+</aside>
+
+<button class="arrow prev glass" id="prev" aria-label="Prenda anterior"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"/></svg></button>
+<button class="arrow next glass" id="next" aria-label="Prenda siguiente"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg></button>
+
+<div class="stage" id="stage"><div class="arc" id="arc"></div></div>
+
+<div class="model" id="model" aria-live="polite">
+  <div class="floor"></div>
+  <div class="fig" id="mCur"></div>
+  <div class="fig" id="mNext"></div>
+  <div class="grid" id="grid"></div>
+  <div class="scan" id="scan"></div>
+</div>
+
+<section class="buy glass" id="buy" aria-label="Lo que te recomiendo">
+  <div class="thumb"><i id="thumb"></i></div>
+  <div class="info">
+    <div class="row"><span class="ln name" id="bName"></span><span class="verdict" id="bVerdict"></span></div>
+    <p class="advice" id="bAdvice"></p>
+  </div>
+  <div class="side" id="side"></div>
+</section>
+
+<div class="cur" id="cur"><div class="ring"></div><div class="dt"></div><span class="tx t1">PROBAR</span><span class="tx t2">MOVER</span></div>
+
+<script>
+const PRUEBA = {{PRUEBA}};
+const LOOK_IMG = {{LOOK_IMGS}};
+const OUTFIT_IMG = {{OUTFIT_IMGS}};
+/* "percha": fotos de las prendas colgadas · "recorte": tronco del look · "prueba": percha dibujada */
+const OUTFIT_TIPO = {{OUTFIT_TIPO}};
+const COLGADA = OUTFIT_TIPO !== "recorte";
+
+const OCC = [
+  {k:"diario",  l:"Día a día", w:"HOY",     f:"el día a día"},
+  {k:"trabajo", l:"Trabajo",   w:"OFICINA", f:"el trabajo"},
+  {k:"cita",    l:"Cita",      w:"CITA",    f:"una cita"},
+  {k:"viaje",   l:"Viaje",     w:"VIAJE",   f:"un viaje"},
+  {k:"evento",  l:"Evento",    w:"EVENTO",  f:"un evento"},
+];
+const TEMP = [
+  {k:"otono",     l:"Otoño",     frio:true},
+  {k:"invierno",  l:"Invierno",  frio:true},
+  {k:"primavera", l:"Primavera", frio:false},
+  {k:"verano",    l:"Verano",    frio:false},
+];
+/* Los looks, las tiendas y los textos vienen de vestidor.config.json (los mete construir.py). */
+const LOOKS = {{LOOKS}};
+const TIENDAS = {{TIENDAS}};
+const BUSQUEDA_EXTRA = {{BUSQUEDA_EXTRA}};
+const HANGER = `<svg class="hanger" viewBox="0 0 100 44" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <path d="M50 17V12c0-3.2 5-3.6 5-7.4C55 1.8 52.8 0 50 0s-4.6 1.6-4.8 3.6" stroke="#cfc8bd" stroke-width="2.2"/>
+  <path d="M50 17 7 37.5c-2.6 1.3-1.8 4.5 1 4.5h84c2.8 0 3.6-3.2 1-4.5L50 17Z" stroke="#a07c56" stroke-width="3.2" fill="rgba(160,124,86,.06)"/>
+</svg>`;
+
+const N = LOOKS.length, NC = N * 2;
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+const root = document.documentElement;
+const mod = (a, n) => ((a % n) + n) % n;
+
+/* ---------- estado ---------- */
+const mes = new Date().getMonth();
+const S = {
+  occ: 0,
+  temp: mes >= 8 && mes <= 10 ? 0 : (mes === 11 || mes <= 1) ? 1 : mes <= 4 ? 2 : 3,
+  mode: "armario", pos: 0, target: 0, shown: -1, color: 0,
+  intro: RM ? 1 : 0, sx: 0, sy: 0, tx: 0, ty: 0,
+};
+let W = innerWidth, H = innerHeight, XS = [], phone = false;
+
+/* ---------- puntuación de la asesora ---------- */
+function score(i) {
+  const L = LOOKS[i];
+  return (L.occ.includes(OCC[S.occ].k) ? 2 : 0) + (L.temp.includes(TEMP[S.temp].k) ? 1 : 0);
+}
+function best() {
+  let b = 0, bs = -1;
+  for (let i = 0; i < N; i++) { const s = score(i); if (s > bs) { bs = s; b = i; } }
+  return b;
+}
+function verdict(i) {
+  const L = LOOKS[i], o = OCC[S.occ], t = TEMP[S.temp], s = score(i);
+  const nota = t.frio ? L.frio : L.calor;
+  if (s === 3) return {cls:"ok", txt:"Ideal", adv:`${L.por} Perfecta para ${o.f} en ${t.l.toLowerCase()}.`};
+  if (s === 2) return {cls:"mid", txt:"Funciona", adv:`${L.por} ${nota}`};
+  const b = best();
+  if (b !== i && score(b) >= 2) return {cls:"no", txt:"Hay algo mejor", adv:`Para ${o.f} te va mejor: ${LOOKS[b].n.toLowerCase()}. ${nota}`};
+  return {cls:"mid", txt:"Funciona", adv:`${L.por} ${nota}`};
+}
+
+/* ---------- segmentados (ocasión y temporada) ---------- */
+function buildSeg(el, list, cur, onPick) {
+  list.forEach((it, i) => {
+    const b = document.createElement("button");
+    b.textContent = it.l;
+    b.setAttribute("aria-pressed", i === cur);
+    b.addEventListener("click", () => { onPick(i); setSeg(el, i); });
+    el.appendChild(b);
+  });
+}
+function setSeg(el, i) {
+  const btns = el.querySelectorAll("button");
+  btns.forEach((b, j) => b.setAttribute("aria-pressed", j === i));
+  const b = btns[i], pill = el.querySelector(".pill");
+  pill.style.width = b.offsetWidth + "px";
+  pill.style.transform = `translateX(${b.offsetLeft}px)`;
+}
+buildSeg($("occ"), OCC, S.occ, i => { S.occ = i; setGhost(); recommend(); });
+buildSeg($("temp"), TEMP, S.temp, i => { S.temp = i; recommend(); });
+
+/* ---------- palabra de fondo ---------- */
+function setGhost() {
+  const g = $("ghost"), w = OCC[S.occ].w;
+  g.innerHTML = [...w].map(c => `<span>${c}</span>`).join("");
+  sizeGhost();
+  if (!RM && S.intro >= 1) g.querySelectorAll("span").forEach((s, i) =>
+    s.animate([{transform:"translateY(40px)", opacity:0}, {transform:"none", opacity:1}],
+      {duration:700, delay:i * 45, easing:"cubic-bezier(.2,.8,.2,1)", fill:"backwards"}));
+}
+function sizeGhost() {
+  const len = OCC[S.occ].w.length, mh = parseFloat(getComputedStyle(root).getPropertyValue("--MH"));
+  $("ghost").style.fontSize = Math.min(mh * .36, W * .9 / (len * .68)) + "px";
+}
+
+/* ---------- tarjetas ---------- */
+const cards = [];
+for (let i = 0; i < NC; i++) {
+  const k = i % N, c = document.createElement("div");
+  c.className = "card glass";
+  c.dataset.i = i;
+  c.innerHTML = `<div class="bar"></div><div class="hang">${HANGER}<div class="g"></div></div><div class="badge">Recomendada</div><div class="nm"></div><div class="sb"></div><div class="sheen"></div>`;
+  if (OUTFIT_TIPO !== "prueba") c.classList.add(OUTFIT_TIPO === "percha" ? "percha-foto" : "recorte");
+  c.querySelector(".g").style.backgroundImage = `url("${OUTFIT_IMG[k]}")`;
+  c.querySelector(".nm").textContent = LOOKS[k].n;
+  const card = {el:c, hang:c.querySelector(".hang"), k, seed:i * 1.7, th:0, om:0, px:null, pvx:0};
+  c.addEventListener("pointerenter", e => {
+    if (RM) return;
+    c.classList.remove("shine"); void c.offsetWidth; c.classList.add("shine");
+    card.om += (e.movementX >= 0 ? 1 : -1) * 1.4;   // la prenda se mece al rozarla
+  });
+  $("arc").appendChild(c);
+  cards.push(card);
+}
+function paintCards() {
+  const b = best(), ideal = score(b) >= 2;
+  cards.forEach(c => {
+    c.el.classList.toggle("best", ideal && c.k === b);
+    c.el.querySelector(".sb").textContent = S.mode === "armario" ? "En tu armario" : "Ver en tiendas";
+  });
+}
+
+/* ---------- recomendar: girar el arco al mejor look ---------- */
+function recommend() {
+  paintCards();
+  const b = best(), cur = Math.round(S.target);
+  let d = mod(b - mod(cur, N), N);
+  if (d > N / 2) d -= N;
+  S.target = cur + d;
+  if (d === 0 && S.shown >= 0) updateBuy(S.shown, false);
+}
+
+/* ---------- tarjeta de la asesora ---------- */
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function roll(el, text) {
+  if (el.dataset.t === text) return;
+  el.dataset.t = text;
+  const old = el.querySelector("span"), n = document.createElement("span");
+  n.textContent = text;
+  if (RM || !old) { el.innerHTML = ""; el.appendChild(n); return; }
+  el.appendChild(n);
+  const o = {duration:620, easing:"cubic-bezier(.2,.8,.2,1)", fill:"forwards"};
+  n.animate([{transform:"translateY(110%)"}, {transform:"translateY(0)"}], o);
+  old.animate([{transform:"translateY(0)"}, {transform:"translateY(-110%)"}], o).onfinish = () => old.remove();
+}
+function updateBuy(k, fresh) {
+  const L = LOOKS[k], v = verdict(k);
+  roll($("bName"), L.n);
+  const vd = $("bVerdict");
+  vd.className = "verdict " + v.cls;
+  vd.textContent = v.txt;
+  const adv = $("bAdvice");
+  if (adv.textContent !== v.adv) {
+    adv.textContent = v.adv;
+    if (!RM) adv.animate([{opacity:0, transform:"translateY(6px)"}, {opacity:.95, transform:"none"}], {duration:500, easing:"cubic-bezier(.2,.8,.2,1)"});
+  }
+  if (fresh) {
+    S.color = 0;
+    const t = $("thumb");
+    t.style.backgroundImage = `url("${OUTFIT_IMG[k]}")`;
+    if (!RM) t.animate([{transform:"translateY(70%) scale(.8)", opacity:0}, {transform:"none", opacity:1}], {duration:650, easing:"cubic-bezier(.2,.8,.2,1)"});
+  }
+  renderSide(k);
+}
+function renderSide(k) {
+  const L = LOOKS[k], side = $("side");
+  if (S.mode === "armario") {
+    side.innerHTML = `<span class="ln lbl" id="cLbl"></span><div class="dots">${L.c.map((c, i) =>
+      `<button class="dot" style="background:${c[1]}" aria-label="${esc(c[0])}" aria-pressed="${i === S.color}" data-i="${i}"></button>`).join("")}</div>`;
+    roll($("cLbl"), "Paleta · " + L.c[S.color][0]);
+    side.querySelectorAll(".dot").forEach(d => d.addEventListener("click", () => {
+      S.color = +d.dataset.i;
+      side.querySelectorAll(".dot").forEach(x => x.setAttribute("aria-pressed", x === d));
+      roll($("cLbl"), "Paleta · " + L.c[S.color][0]);
+    }));
+  } else {
+    side.innerHTML = `<span class="lbl">Buscar parecida en</span><div class="stores">${TIENDAS.map(t =>
+      `<a class="store" target="_blank" rel="noopener" href="https://www.google.com/search?tbm=shop&q=${encodeURIComponent([t, L.q, BUSQUEDA_EXTRA].filter(Boolean).join(" "))}">${t}</a>`).join("")}</div>`;
+  }
+}
+function setMode(m) {
+  S.mode = m;
+  $("mArm").setAttribute("aria-pressed", m === "armario");
+  $("mShop").setAttribute("aria-pressed", m === "tiendas");
+  paintCards();
+  if (S.shown >= 0) renderSide(S.shown);
+}
+$("mArm").addEventListener("click", () => setMode("armario"));
+$("mShop").addEventListener("click", () => setMode("tiendas"));
+
+/* ---------- probar el look (escaneo) ---------- */
+let anims = [];
+const mCur = $("mCur"), mNext = $("mNext"), grid = $("grid"), scan = $("scan");
+function tryOn(k) {
+  const fresh = S.shown !== k;
+  S.shown = k;
+  updateBuy(k, fresh);
+  anims.forEach(a => a.cancel()); anims = [];
+  const url = `url("${LOOK_IMG[k]}")`;
+  if (RM) { mCur.style.backgroundImage = url; mCur.style.opacity = 1; return; }
+  mNext.style.backgroundImage = url;
+  grid.style.webkitMaskImage = url; grid.style.maskImage = url;
+  const e = "cubic-bezier(.65,0,.35,1)";
+  const clip = mNext.animate([{clipPath:"inset(0 0 100% 0)"}, {clipPath:"inset(0 0 0% 0)"}], {duration:950, easing:e, fill:"forwards"});
+  anims = [clip,
+    // el look anterior se borra justo por debajo de la línea: nunca se ven las dos a la vez
+    mCur.animate([{clipPath:"inset(0 0 0 0)"}, {clipPath:"inset(100% 0 0 0)"}], {duration:950, easing:e, fill:"forwards"}),
+    grid.animate([{clipPath:"inset(0 0 100% 0)"}, {clipPath:"inset(0 0 0 0)", offset:.5}, {clipPath:"inset(100% 0 0 0)"}], {duration:1092, easing:e}),
+    scan.animate([
+      {top:"0%", transform:"scaleX(.2)", opacity:0},
+      {top:"6%", transform:"scaleX(1)", opacity:1, offset:.08},
+      {top:"94%", transform:"scaleX(1)", opacity:1, offset:.92},
+      {top:"100%", transform:"scaleX(.2)", opacity:0}], {duration:950, easing:e}),
+    mNext.animate([{transform:"scale(1.006)"}, {transform:"scale(1)"}], {duration:1250, easing:"ease-out"})];
+  clip.onfinish = () => {
+    mCur.style.backgroundImage = url; mCur.style.opacity = 1;
+    anims.forEach(a => a.cancel()); anims = [];
+  };
+}
+
+/* ---------- medidas ---------- */
+function layout() {
+  W = innerWidth; H = innerHeight; phone = W < 768;
+  const buy = $("buy").getBoundingClientRect();
+  // en escritorio la tarjeta va a la derecha y ella llega casi al borde inferior
+  const mb = phone ? H - buy.top + 8 : Math.max(14, H * .025);
+  const top = document.querySelector(".top").getBoundingClientRect().bottom + (phone ? 8 : 14);
+  let mh = Math.max(220, H - mb - top);
+  mh = Math.min(mh, (W - 32) * 1.5);
+  root.style.setProperty("--MH", mh + "px");
+  root.style.setProperty("--MB", mb + "px");
+  root.style.setProperty("--TOP", top + "px");
+  const cw = phone ? Math.min(W * .28, 140) : Math.min(W * .13, mh * .34, 220);
+  root.style.setProperty("--CW", cw + "px");
+  $("arc").style.top = (top + mh * (phone ? .46 : .38)) + "px";
+  XS = (phone ? [0, .36, .5, .56, .6, .62] : [0, .215, .345, .432, .49, .52]).map(v => v * W);
+  sizeGhost();
+  setSeg($("occ"), S.occ); setSeg($("temp"), S.temp);
+}
+function xAt(a) {
+  const i = Math.min(Math.floor(a), XS.length - 2), f = Math.min(1, a - i);
+  return XS[i] + (XS[i + 1] - XS[i]) * f;
+}
+
+/* ---------- bucle ---------- */
+let drag = null, t0 = performance.now();
+function frame(now) {
+  const t = (now - t0) / 1000;
+  if (!drag) S.pos = RM ? S.target : S.pos + (S.target - S.pos) * .11;
+  if (S.intro < 1) S.intro = Math.min(1, S.intro + .012);
+  const ie = 1 - Math.pow(1 - S.intro, 3);
+  S.sx += (S.tx - S.sx) * .06; S.sy += (S.ty - S.sy) * .06;
+
+  for (let i = 0; i < NC; i++) {
+    const c = cards[i], u = mod(i - S.pos + N, NC) - N, a = Math.abs(u), sg = Math.sign(u);
+    let s, z, op = 1, ry, blur = 0;
+    if (a < 1) { s = .55 + .45 * a; z = -260 * (1 - a); op = a; ry = -sg * 16 * a; }
+    else { s = 1 / (1 + .3 * Math.pow(a - 1, 1.15)); z = -110 * (a - 1); ry = -sg * (16 + 9 * Math.min(2, a - 1)); blur = Math.max(0, a - 1.6) * 2.4; }
+    if (a > 3.4) op *= Math.max(0, 1 - (a - 3.4) / .8);
+    const bob = RM ? 0 : Math.sin(t * 1.1 + c.seed) * H * .006 * Math.min(1, a);
+    const x = sg * xAt(a) * ie, y = bob - (1 - s) * H * .04;
+    ry += S.sx * 10;
+    op *= ie;
+    const el = c.el;
+    el.style.transform = `translate(${x}px,${y}px) perspective(1300px) translateZ(${z}px) rotateY(${ry}deg) rotateX(${-S.sy * 6}deg) scale(${s * (.6 + .4 * ie)})`;
+    el.style.opacity = op;
+    el.style.filter = blur > .05 ? `blur(${blur}px)` : "none";
+    el.style.zIndex = a < 1 ? 1 : Math.round(100 - 10 * a);
+    el.style.visibility = op < .01 ? "hidden" : "visible";
+
+    /* péndulo: la prenda colgada reacciona a la aceleración de su tarjeta */
+    if (!RM && COLGADA) {
+      if (c.px === null) c.px = x;
+      const vx = x - c.px, ax = vx - c.pvx;
+      c.px = x; c.pvx = vx;
+      c.om += -.022 * c.th - .075 * c.om - ax * .55;
+      c.th = Math.max(-22, Math.min(22, c.th + c.om));
+      const idle = Math.sin(t * .9 + c.seed) * .7;
+      c.hang.style.transform = `rotate(${(c.th + idle).toFixed(2)}deg)`;
+    }
+  }
+  $("room").style.transform = `translate3d(${-S.sx * 22}px,${-S.sy * 14}px,0) scale(${1.08 - .03 * ie})`;
+  const g = $("ghost");
+  g.style.transform = `translate(calc(-50% - ${S.sx * 40}px),${-S.sy * 16}px)`;
+  if (S.intro < 1) g.querySelectorAll("span").forEach((sp, i) => sp.style.transform = `translateY(${(1 - ie) * (60 + 30 * i)}px)`);
+
+  if (!drag && Math.abs(S.target - S.pos) < .02 && mod(Math.round(S.target), N) !== S.shown) tryOn(mod(Math.round(S.target), N));
+  requestAnimationFrame(frame);
+}
+
+/* ---------- entrada ---------- */
+const stage = $("stage");
+stage.addEventListener("pointerdown", e => {
+  drag = {x:e.clientX, p0:S.pos, moved:0, lx:e.clientX, lt:e.timeStamp, v:0};
+  stage.setPointerCapture(e.pointerId);
+  cur.classList.add("down", "drag");
+});
+stage.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x;
+  drag.moved = Math.max(drag.moved, Math.abs(dx));
+  S.pos = drag.p0 - dx / XS[1];
+  const dt = e.timeStamp - drag.lt;
+  if (dt > 0) drag.v = drag.v * .5 + ((e.clientX - drag.lx) / dt) * .5;
+  drag.lx = e.clientX; drag.lt = e.timeStamp;
+});
+function endDrag(e) {
+  if (!drag) return;
+  const d = drag; drag = null;
+  cur.classList.remove("down");
+  if (d.moved < 6) {
+    const card = document.elementsFromPoint(e.clientX, e.clientY).find(n => n.classList && n.classList.contains("card"));
+    if (card) {
+      const u = mod(+card.dataset.i - S.pos + N, NC) - N;
+      S.target = Math.round(S.pos + u);
+    }
+    S.pos = d.p0;
+    return;
+  }
+  S.target = Math.round(S.pos - d.v * 3.2);
+}
+stage.addEventListener("pointerup", endDrag);
+stage.addEventListener("pointercancel", endDrag);
+
+let wheelAcc = 0, wheelT = 0;
+addEventListener("wheel", e => {
+  wheelAcc += Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+  if (Math.abs(wheelAcc) > 60 && e.timeStamp - wheelT > 260) {
+    S.target += Math.sign(wheelAcc); wheelAcc = 0; wheelT = e.timeStamp;
+  }
+}, {passive:true});
+addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") S.target++;
+  if (e.key === "ArrowLeft") S.target--;
+});
+$("next").addEventListener("click", () => S.target++);
+$("prev").addEventListener("click", () => S.target--);
+
+/* ---------- cursor ---------- */
+const cur = $("cur");
+let cx = W / 2, cy = H / 2, px = cx, py = cy;
+addEventListener("pointermove", e => {
+  px = e.clientX; py = e.clientY;
+  S.tx = px / W - .5; S.ty = py / H - .5;
+  if (e.pointerType !== "mouse") return;
+  const n = document.elementsFromPoint(px, py);
+  const onCard = n.some(x => x.classList && x.classList.contains("card"));
+  const onBtn = n.some(x => x.closest && x.closest("button, a"));
+  const onStage = n[0] === stage || n[0] === $("arc");
+  cur.classList.toggle("try", onCard && !drag);
+  cur.classList.toggle("btn", onBtn && !onCard);
+  cur.classList.toggle("drag", !!drag || (!onCard && !onBtn && onStage));
+});
+(function follow() {
+  cx += (px - cx) * .22; cy += (py - cy) * .22;
+  cur.style.transform = `translate(${cx}px,${cy}px)`;
+  requestAnimationFrame(follow);
+})();
+
+/* ---------- arranque ---------- */
+if (PRUEBA) $("tag").hidden = false;   // aviso: se ven las imágenes de ejemplo
+addEventListener("resize", layout);
+setGhost();
+layout();
+paintCards();
+recommend();
+S.pos = S.target - (RM ? 0 : .0001);
+document.fonts && document.fonts.ready.then(layout);
+// precarga del resto de looks para que el cambio sea instantáneo
+addEventListener("load", () => LOOK_IMG.concat(OUTFIT_IMG).forEach(u => { const im = new Image(); im.decoding = "async"; im.src = u; }));
+requestAnimationFrame(frame);
+</script>

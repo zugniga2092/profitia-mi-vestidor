@@ -1,0 +1,10 @@
+# Tus fotos son de una persona real: no se suben (solo este LEEME)
+fotos/*
+!fotos/LEEME.md
+# Lo que genera construir.py
+dist/
+.listo/
+vestidor.html
+__pycache__/
+.vercel
+NUL

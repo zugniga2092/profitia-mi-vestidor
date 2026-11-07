@@ -1,0 +1,37 @@
+name: Comprobar el vestidor
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar
+        run: python -m pip install -r requirements.txt
+
+      - name: Construir con las imágenes de ejemplo
+        run: python construir.py --un-archivo
+
+      - name: Comprobar que la página está completa
+        run: |
+          test -f dist/index.html
+          ! grep -q "{{" dist/index.html
+          python -c "import json; c=json.load(open('vestidor.config.json',encoding='utf-8')); assert len(c['looks'])>=2; [l[k] for l in c['looks'] for k in ('n','occ','temp','por','frio','calor','q','c')]; print('config ok:', len(c['looks']), 'looks')"
+
+      - name: Buscar secretos en todo el historial (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

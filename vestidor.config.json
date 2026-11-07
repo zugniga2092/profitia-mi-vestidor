@@ -1,0 +1,256 @@
+{
+  "nombre": "Mi Vestidor",
+  "subtitulo": "Asesora de estilo",
+  "tiendas": [
+    "Zara",
+    "Mango",
+    "Bershka",
+    "Stradivarius"
+  ],
+  "busqueda_extra": "mujer",
+  "looks": [
+    {
+      "n": "Blazer gris oversize",
+      "occ": [
+        "trabajo",
+        "diario"
+      ],
+      "temp": [
+        "otono",
+        "primavera"
+      ],
+      "por": "Blazer amplio con top blanco y vaquero ancho: arreglada sin parecer seria.",
+      "frio": "Con más frío, añade un jersey fino debajo del blazer.",
+      "calor": "Con calor, el blazer sobre los hombros y listo.",
+      "q": "blazer gris oversize",
+      "c": [
+        [
+          "Gris marengo",
+          "#4a4a4e"
+        ],
+        [
+          "Blanco",
+          "#f3f1ec"
+        ],
+        [
+          "Vaquero",
+          "#9fb0c2"
+        ],
+        [
+          "Negro",
+          "#1d1d20"
+        ]
+      ],
+      "ejemplo": {
+        "capa": "chaqueta",
+        "abajo": "pantalon",
+        "colores": {
+          "capa": "#4a4a4e",
+          "arriba": "#f3f1ec",
+          "abajo": "#9fb0c2",
+          "zapatos": "#1d1d20"
+        }
+      }
+    },
+    {
+      "n": "Total denim",
+      "occ": [
+        "diario",
+        "viaje"
+      ],
+      "temp": [
+        "primavera",
+        "otono"
+      ],
+      "por": "Chaqueta y vaquero en el mismo tono con zapatillas: cómoda para todo el día.",
+      "frio": "Con frío, un abrigo largo encima mantiene el look.",
+      "calor": "Con calor, la chaqueta atada a la cintura.",
+      "q": "chaqueta vaquera",
+      "c": [
+        [
+          "Vaquero claro",
+          "#a9bccf"
+        ],
+        [
+          "Blanco",
+          "#f3f1ec"
+        ],
+        [
+          "Plata",
+          "#cfd2d6"
+        ]
+      ],
+      "ejemplo": {
+        "capa": "chaqueta",
+        "abajo": "pantalon",
+        "colores": {
+          "capa": "#a9bccf",
+          "arriba": "#f3f1ec",
+          "abajo": "#a9bccf",
+          "zapatos": "#f3f1ec"
+        }
+      }
+    },
+    {
+      "n": "Chaqueta beige corta",
+      "occ": [
+        "diario",
+        "viaje"
+      ],
+      "temp": [
+        "otono",
+        "primavera"
+      ],
+      "por": "Chaqueta corta beige con vaquero oscuro: equilibra y estiliza la figura.",
+      "frio": "En pleno invierno se queda corta: mejor el abrigo camel.",
+      "calor": "Con calor, solo el top blanco con el vaquero.",
+      "q": "chaqueta corta beige",
+      "c": [
+        [
+          "Beige",
+          "#d6c3a5"
+        ],
+        [
+          "Blanco",
+          "#f3f1ec"
+        ],
+        [
+          "Vaquero oscuro",
+          "#27324d"
+        ]
+      ],
+      "ejemplo": {
+        "capa": "corta",
+        "abajo": "pantalon",
+        "colores": {
+          "capa": "#d6c3a5",
+          "arriba": "#f3f1ec",
+          "abajo": "#27324d",
+          "zapatos": "#d6c3a5"
+        }
+      }
+    },
+    {
+      "n": "Abrigo camel y botas",
+      "occ": [
+        "trabajo",
+        "cita",
+        "evento"
+      ],
+      "temp": [
+        "otono",
+        "invierno"
+      ],
+      "por": "Abrigo camel, negro debajo y botas altas: el look más elegante del armario.",
+      "frio": "Hecho para el frío: las medias tupidas lo completan.",
+      "calor": "Con calor sobra el abrigo; guárdalo para la noche.",
+      "q": "abrigo camel",
+      "c": [
+        [
+          "Camel",
+          "#b98a5e"
+        ],
+        [
+          "Negro",
+          "#1d1d20"
+        ],
+        [
+          "Crudo",
+          "#efe9dd"
+        ]
+      ],
+      "ejemplo": {
+        "capa": "abrigo",
+        "abajo": "falda",
+        "colores": {
+          "capa": "#b98a5e",
+          "arriba": "#1d1d20",
+          "abajo": "#1d1d20",
+          "zapatos": "#1d1d20"
+        }
+      }
+    },
+    {
+      "n": "Marfil y denim",
+      "occ": [
+        "cita",
+        "evento"
+      ],
+      "temp": [
+        "primavera",
+        "verano"
+      ],
+      "por": "Top marfil asimétrico con vaquero ancho y dorados: luminoso y femenino.",
+      "frio": "Con frío, añade un blazer o el abrigo camel encima.",
+      "calor": "Con calor, perfecto tal cual.",
+      "q": "top halter marfil asimétrico",
+      "c": [
+        [
+          "Marfil",
+          "#efe7d6"
+        ],
+        [
+          "Vaquero",
+          "#a9bccf"
+        ],
+        [
+          "Dorado",
+          "#c9a55a"
+        ]
+      ],
+      "ejemplo": {
+        "capa": "ninguna",
+        "abajo": "pantalon",
+        "colores": {
+          "capa": "",
+          "arriba": "#efe7d6",
+          "abajo": "#a9bccf",
+          "zapatos": "#c9a55a"
+        }
+      }
+    },
+    {
+      "n": "Jersey chocolate y botas",
+      "occ": [
+        "cita",
+        "diario"
+      ],
+      "temp": [
+        "otono",
+        "invierno"
+      ],
+      "por": "Jersey marrón, cuello de camisa y minifalda con botas: tendencia de otoño.",
+      "frio": "Con frío funciona tal cual; un abrigo largo encima si baja más.",
+      "calor": "Con calor pesa demasiado: mejor el marfil y denim.",
+      "q": "jersey marrón punto",
+      "c": [
+        [
+          "Chocolate",
+          "#5a3626"
+        ],
+        [
+          "Negro",
+          "#1d1d20"
+        ],
+        [
+          "Blanco",
+          "#f3f1ec"
+        ],
+        [
+          "Cuero",
+          "#6b3f24"
+        ]
+      ],
+      "ejemplo": {
+        "capa": "ninguna",
+        "abajo": "falda",
+        "colores": {
+          "capa": "",
+          "arriba": "#5a3626",
+          "abajo": "#1d1d20",
+          "zapatos": "#6b3f24"
+        }
+      }
+    }
+  ]
+}
